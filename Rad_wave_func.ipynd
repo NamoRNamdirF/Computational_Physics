@@ -1,0 +1,67 @@
+#Rad distr func
+import numpy as np
+from scipy.sparse import diags
+from scipy.sparse.linalg import eigsh
+import matplotlib.pyplot as plt
+
+L = 100*np.pi
+N = 1001
+xa = 0
+xb = L
+x = np.linspace(xa, xb, N)
+dx = x[1] - x[0]
+
+l = 1
+k = 0
+T = -0.5*diags([-2., 1., 1.], [0, -1, 1], shape=(N, N))/dx**2
+U_vec = (0.5*l*(l + 1)/(x**2 + 1e-6) - 1/(np.abs(x) + 1e-6))
+U = diags([U_vec], [0])
+
+H = T + U
+
+vals, vecs = eigsh(H, which='SA')
+
+print(np.round(vals, 6))
+print(np.round([-1/(2*n**2) for n in range(k + l + 1, k + l + 7)], 6))
+
+for k in range(5):
+    vec = vecs[:, k]
+    mag = np.sqrt(np.dot(vecs[:, k],vecs[:, k]))
+    vec = vec/mag
+    plt.plot((x), (vec), label=r"$n=%i$"% (k+1))
+
+plt.xlabel(r"$x$")
+plt.ylabel(r"$\psi(x)$")
+plt.xlim(xa, xb)
+plt.legend()
+plt.savefig("eigenvectors.png", dpi=600) 
+plt.show()
+
+
+#Трехмерные графики плотности вероятности для s,p и d состояний.
+
+%matplotlib inline
+from __future__ import division
+import scipy as sci
+import scipy.special as sp
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm, colors
+l = 1   #degree
+m = 0    # order
+PHI, THETA = np.mgrid[0:2*np.pi:200j, 0:np.pi:100j] #arrays of angular variables
+R = np.abs(sp.sph_harm(m, l, PHI, THETA)) #Array with the absolute values of Ylm
+#Now we convert to cartesian coordinates
+# for the 3D representation
+X = R * np.sin(THETA) * np.cos(PHI)
+Y = R * np.sin(THETA) * np.sin(PHI)
+Z = R * np.cos(THETA)
+
+N = R/R.max()    
+fig, ax = plt.subplots(subplot_kw=dict(projection='3d'), figsize=(12,10))
+im = ax.plot_surface(X, Y, Z, rstride=1, cstride=1)
+ax.set_title(r'$|Y^0_ 1|$', fontsize=20)
+m = cm.ScalarMappable(cmap=cm.jet)
+m.set_array(R)    
