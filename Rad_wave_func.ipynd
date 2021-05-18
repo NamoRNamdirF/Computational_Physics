@@ -51,10 +51,9 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm, colors
 l = 1   #degree
 m = 0    # order
-PHI, THETA = np.mgrid[0:2*np.pi:200j, 0:np.pi:100j] #arrays of angular variables
-R = np.abs(sp.sph_harm(m, l, PHI, THETA)) #Array with the absolute values of Ylm
-#Now we convert to cartesian coordinates
-# for the 3D representation
+PHI, THETA = np.mgrid[0:2*np.pi:200j, 0:np.pi:100j] 
+R = np.abs(sp.sph_harm(m, l, PHI, THETA)) 
+
 X = R * np.sin(THETA) * np.cos(PHI)
 Y = R * np.sin(THETA) * np.sin(PHI)
 Z = R * np.cos(THETA)
