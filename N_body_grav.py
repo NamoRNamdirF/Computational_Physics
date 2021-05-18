@@ -21,6 +21,7 @@ def get_a(cord, mass, G):
     # соединяет массивы по горизонтали
     a = hstack((ax, ay, az))
     return a
+
 # def get_a(pos, mass, G):
 #
 #     N = pos.shape[0]
@@ -64,7 +65,7 @@ def main():
         acc = get_a(cord, mass, G)
         v += acc * dt / 2
         t += dt
-        #############################################################
+        
         plt.sca(ax1)
         plt.scatter(cord[:, 0], cord[:, 1], cord[:, 2], s=1, color='black')
         plt.pause(0.001)
@@ -75,6 +76,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-# """
-# elapsed_time = timeit.timeit(code_to_test, number=100)/100
-# print(elapsed_time)
+
